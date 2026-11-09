@@ -1,112 +1,51 @@
-# Hello World with Typescript
+# Cinema Seat Manager
 
-<!-- hide -->
-> By [@ehiber](https://github.com/ehiber) and contributors at [4Geeks Academy](https://4geeksacademy.com/)
+Prototipo de línea de comandos, en TypeScript, para gestionar las reservas de asientos de una sala pequeña de cine (8 filas × 10 asientos por fila).
 
-[![build by developers](https://img.shields.io/badge/build_by-Developers-blue)](https://4geeks.com)
-[![twitter](https://img.shields.io/twitter/follow/4geeksacademy?style=social&logo=twitter)](https://twitter.com/4geeksacademy)
+La sala se representa **solo con un arreglo bidimensional** (sin objetos ni clases):
 
-*Estas instrucciones estan disponibles en [espanol](./README.es.md).*
-<!-- endhide -->
-Start coding a TypeScript/HTML/CSS website in 30 seconds by opening this template using 4Geeks' [One-Click Coding](https://s.4geeks.com/start?repo=https://github.com/4GeeksAcademy/typescript-hello) or locally on your computer.
+- `0` → asiento disponible
+- `1` → asiento ocupado
 
-## Before you begin
-
-Install the packages by typing:
+## Cómo ejecutarlo
 
 ```bash
 npm install
+npm run console
 ```
 
-## How do I run my website to see live changes?
-
-Type on the command line:
-
-```bash
-npm run start
-```
-
-Then open your local URL in the browser (usually `http://localhost:5173`).
-
-## How do I run this in GitHub Codespaces?
-
-Run the same development server:
-
-```bash
-npm run start
-```
-
-Vite is configured to listen on `0.0.0.0`, so Codespaces can detect and forward port `5173` automatically.
-
-## How do I run only the TypeScript check?
-
-Use this command to validate only TypeScript without starting Vite:
+Para comprobar los tipos:
 
 ```bash
 npm run typecheck
 ```
 
-## How do I run `main.ts` from the terminal?
+## Estructura
 
-If you want to execute `./src/main.ts` directly and see `console.log` output in the terminal, run:
+| Archivo | Qué contiene |
+| --- | --- |
+| `src/seats.ts` | Las funciones del gestor de asientos |
+| `src/main.ts` | Los escenarios de prueba que se muestran en consola |
 
-```bash
-npm run console
-```
+## Funciones (`src/seats.ts`)
 
-This command is already wired to `./src/main.ts`.
+| Función | Qué hace |
+| --- | --- |
+| `createSeatMatrix()` | Crea la matriz de 8 filas × 10 columnas con todos los asientos disponibles (`0`). |
+| `printSeatMap(seats)` | Imprime la sala en consola: `X` ocupado, `L` libre, con números de fila y de columna. |
+| `reserveSeat(seats, row, column)` | Reserva un asiento (`0` → `1`). Comprueba que la posición exista y que no esté ya ocupado; devuelve un mensaje de éxito o de error. |
+| `countSeats(seats)` | Devuelve `[ocupados, disponibles]` de toda la sala. |
+| `findAdjacentSeats(seats)` | Busca dos asientos libres contiguos en la misma fila y devuelve el **primer** par (`[[fila, col], [fila, col + 1]]`). Si no hay ninguno, devuelve `[]`. |
+| `describeAdjacentSeats(pair)` | Convierte el resultado anterior en un mensaje claro para el personal de taquilla. |
 
-## Where do I write my code?
+## Escenarios de prueba (`src/main.ts`)
 
-It depends on the language:
+1. **Sala vacía:** todos los asientos disponibles.
+2. **Sala parcialmente ocupada:** reservas correctas, reserva de un asiento ya ocupado y posiciones inexistentes; después se reserva el par contiguo encontrado.
+3. **Sala casi llena:** solo quedan 5 asientos sueltos, así que no hay pareja contigua.
+4. **Sala completamente llena:** sin asientos disponibles; se intenta reservar y falla con un mensaje claro.
 
-- `./src/main.ts` for TypeScript logic.
-- `./src/style.css` for styles (Tailwind CSS v4 is already imported).
-- `./index.html` for the HTML shell.
+## Notas
 
-You can add more files as needed, just make sure to import them from `main.ts`.
-
-Note: if you can see the "Hello Rigo" card and the message "If you can see this, Tailwind is working.", Tailwind is configured correctly.
-
-## Troubleshooting
-
-### I don't see my changes...
-
-Every time you change any file inside `./src`, the website refreshes automatically (hot reload).
-
-If changes still don't appear, refresh clearing cache:
-
-- Mac: `Cmd + Shift + R`
-- Windows/Linux: `Ctrl + Shift + R`
-
-## How do I include more images in my project?
-
-Add them inside `./public` and reference them in HTML using `/your-image-name.ext`.
-
-Example:
-
-```html
-<img src="/rigo-baby.jpg" alt="Rigo" />
-```
-
-## How do I include more TypeScript files?
-
-Add files into `./src` and import them from `main.ts`.
-
-Example:
-
-```ts
-import { myVar } from "./file2";
-```
-
-## How do I publish the website?
-
-This boilerplate is compatible with Vercel in one step.
-
-<!-- hide -->
-## Contributors
-
-This template was built as part of the [4Geeks Academy Coding Bootcamp](https://4geeksacademy.com/us/coding-bootcamp) by [ehiber](https://github.com/ehiber) and contributors. Find out more about our [AI Engineering Course](https://4geeksacademy.com/us/coding-bootcamps/ai-engineering), [Full Stack Developer Course](https://4geeksacademy.com/us/coding-bootcamps/part-time-full-stack-developer), and [Data Science Bootcamp](https://4geeksacademy.com/us/coding-bootcamps/datascience-machine-learning).
-
-You can find other templates and resources like this at the [school's GitHub page](https://github.com/4geeksacademy/).
-<!-- endhide -->
+- La búsqueda de asientos contiguos es solo **horizontal** (misma fila). Un asiento libre al final de una fila y otro al principio de la siguiente no cuentan como pareja.
+- No se incluye la interfaz web opcional.
